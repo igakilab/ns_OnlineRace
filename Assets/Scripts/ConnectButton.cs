@@ -25,6 +25,25 @@ public class ConnectButton : MonoBehaviourPunCallbacks
         button.interactable = true;
     }
 
+    // ルームリストが更新された時に呼ばれるコールバック
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        foreach (var info in roomList)
+        {
+            if (info.MaxPlayers == 0)
+            {
+                buttonText.text = "接続";
+                button.interactable = true;
+            }
+            else
+            {
+                buttonText.text = info.PlayerCount + "/" + info.MaxPlayers;
+                //満員ならボタンを無効化する
+                button.interactable = (info.PlayerCount < info.MaxPlayers);
+            }
+        }
+    }
+
     public void OnClick()
     {
         // "room"という名前のルームに参加する（ルームが無ければ作成してから参加する）
