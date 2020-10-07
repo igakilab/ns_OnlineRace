@@ -933,6 +933,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   button: {fileID: 1946885516}
   buttonText: {fileID: 2048575802}
+  inputName: {fileID: 342160405}
 --- !u!1 &2048575800
 GameObject:
   m_ObjectHideFlags: 0

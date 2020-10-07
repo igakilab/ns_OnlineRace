@@ -11,6 +11,7 @@ public class ConnectButton : MonoBehaviourPunCallbacks
 
     public Button button;
     public Text buttonText;
+    public InputField inputName;
 
     void Start()
     {
@@ -53,6 +54,7 @@ public class ConnectButton : MonoBehaviourPunCallbacks
     // マッチングが成功した時に呼ばれるコールバック
     public override void OnJoinedRoom()
     {
+        PhotonNetwork.LocalPlayer.NickName = inputName.text;
         SceneManager.LoadScene("GameScene");
     }
 }
