@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField]
     private TextMeshPro nameLabel = default;
 
+    public float speed = 0.05f;
+
     public new GameObject camera;
     public float xAdjust = 5f;
     public float yAdjust = 3f;
@@ -29,19 +31,19 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             if (Input.GetKey(KeyCode.UpArrow))
             {
-                transform.Translate(0f, 0.05f, 0f);
+                transform.Translate(0f, speed, 0f);
             }
             if (Input.GetKey(KeyCode.DownArrow))
             {
-                transform.Translate(0f, -0.05f, 0f);
+                transform.Translate(0f, -speed, 0f);
             }
             if (Input.GetKey(KeyCode.LeftArrow))
             {
-                transform.Translate(-0.05f, 0f, 0f);
+                transform.Translate(-speed, 0f, 0f);
             }
             if (Input.GetKey(KeyCode.RightArrow))
             {
-                transform.Translate(0.05f, 0f, 0f);
+                transform.Translate(speed, 0f, 0f);
             }
             camera.transform.position = new Vector3(transform.position.x + xAdjust, transform.position.y + yAdjust, camera.transform.position.z);
         }
