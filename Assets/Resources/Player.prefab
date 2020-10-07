@@ -297,6 +297,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameLabel: {fileID: 7491221881273676416}
+  camera: {fileID: 0}
 --- !u!114 &8619319800505372330
 MonoBehaviour:
   m_ObjectHideFlags: 0

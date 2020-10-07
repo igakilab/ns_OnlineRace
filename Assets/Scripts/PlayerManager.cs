@@ -14,14 +14,13 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public Text countDownLabel;
     public Text timerLabel;
 
-    public int countDown = 5;
+    public int countDown = 3;
 
     void Start()
     {
         PhotonNetwork.IsMessageQueueRunning = true;
 
-        var v = new Vector3(Random.Range(-3f, 3f), Random.Range(-3f, 3f));
-        PhotonNetwork.Instantiate("Player", v, Quaternion.identity);
+        PhotonNetwork.Instantiate("Player", new Vector2(-5, -3), Quaternion.identity);
 
         PhotonNetwork.LocalPlayer.SetState(false);
 
