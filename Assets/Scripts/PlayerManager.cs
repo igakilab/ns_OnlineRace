@@ -12,6 +12,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
     public Button readyButton;
     public Text countDownLabel;
+    public Text timerLabel;
 
     public int countDown = 5;
 
@@ -40,7 +41,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public override void OnPlayerPropertiesUpdate(Player target, Hashtable changedProps)
     {
         // 準備完了ボタンが押されたら
-        if (changedProps.TryGetState(out bool value))
+        if (PhotonNetwork.IsMasterClient && changedProps.TryGetState(out bool value))
         {
             int count = 0;
             foreach (var player in PhotonNetwork.PlayerList)
@@ -53,10 +54,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             Debug.Log($"準備完了 {count}/{PhotonNetwork.CurrentRoom.MaxPlayers}");
             if (count == PhotonNetwork.CurrentRoom.MaxPlayers)
             {
-                //カウントダウン
-                //終了後現在の時間設定
                 // 現在のサーバー時刻を、ゲームの開始時刻に設定する
-                if (PhotonNetwork.IsMasterClient && !PhotonNetwork.CurrentRoom.HasCountDownTime())
+                if (!PhotonNetwork.CurrentRoom.HasCountDownTime())
                 {
                     PhotonNetwork.CurrentRoom.SetCountDownTime(PhotonNetwork.ServerTimestamp);
                 }
@@ -79,6 +78,10 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         {
             if (remainingTime > -3)
             {
+                if (PhotonNetwork.IsMasterClient && !PhotonNetwork.CurrentRoom.HasStartTime())
+                {
+                    PhotonNetwork.CurrentRoom.SetStartTime(PhotonNetwork.ServerTimestamp);
+                }
                 countDownLabel.text = "START!!!";
             }
             else
@@ -86,5 +89,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                 countDownLabel.text = "";
             }
         }
+        if (!PhotonNetwork.CurrentRoom.TryGetStartTime(out int timestamp2)) { return; }
+        timerLabel.text = Mathf.Max(unchecked(PhotonNetwork.ServerTimestamp - timestamp2) / 1000f).ToString("f2");
+
     }
 }
