@@ -17,5 +17,24 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     void Update()
     {
+        if (photonView.IsMine)
+        {
+            if (Input.GetKey(KeyCode.UpArrow))
+            {
+                transform.Translate(0f, 0.05f, 0f);
+            }
+            if (Input.GetKey(KeyCode.DownArrow))
+            {
+                transform.Translate(0f, -0.05f, 0f);
+            }
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                transform.Translate(-0.05f, 0f, 0f);
+            }
+            if (Input.GetKey(KeyCode.RightArrow))
+            {
+                transform.Translate(0.05f, 0f, 0f);
+            }
+        }
     }
 }
