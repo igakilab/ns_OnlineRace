@@ -150,6 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 025ab8caf18c3ee47be5153047394ba2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  readyButton: {fileID: 1456455890}
 --- !u!4 &666447827
 Transform:
   m_ObjectHideFlags: 0
@@ -422,7 +423,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1456455891}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1456455888}
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1456455891
 MonoBehaviour:
   m_ObjectHideFlags: 0
