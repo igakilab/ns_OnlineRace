@@ -870,7 +870,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1946885517}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1946885519}
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1946885517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -921,6 +932,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   button: {fileID: 1946885516}
+  buttonText: {fileID: 2048575802}
 --- !u!1 &2048575800
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,9 +17,4 @@ public class ConnectServer : MonoBehaviourPunCallbacks
         // ロビーに接続
         PhotonNetwork.JoinLobby();
     }
-
-    void Update()
-    {
-        
-    }
 }

@@ -1,15 +1,17 @@
 ﻿using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ConnectButton : MonoBehaviourPunCallbacks
 {
 
     public Button button;
+    public Text buttonText;
 
-    // Start is called before the first frame update
     void Start()
     {
         //ボタンを無効に
@@ -23,9 +25,15 @@ public class ConnectButton : MonoBehaviourPunCallbacks
         button.interactable = true;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnClick()
     {
-        
+        // "room"という名前のルームに参加する（ルームが無ければ作成してから参加する）
+        PhotonNetwork.JoinOrCreateRoom("room", new RoomOptions() { MaxPlayers = 4 }, TypedLobby.Default);
+    }
+
+    // マッチングが成功した時に呼ばれるコールバック
+    public override void OnJoinedRoom()
+    {
+        SceneManager.LoadScene("GameScene");
     }
 }
