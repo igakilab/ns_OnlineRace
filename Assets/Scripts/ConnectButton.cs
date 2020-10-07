@@ -54,6 +54,7 @@ public class ConnectButton : MonoBehaviourPunCallbacks
     // マッチングが成功した時に呼ばれるコールバック
     public override void OnJoinedRoom()
     {
+        PhotonNetwork.IsMessageQueueRunning = false;
         PhotonNetwork.LocalPlayer.NickName = inputName.text;
         SceneManager.LoadScene("GameScene");
     }
