@@ -49,6 +49,7 @@ public class ConnectButton : MonoBehaviourPunCallbacks
     {
         // "room"という名前のルームに参加する（ルームが無ければ作成してから参加する）
         PhotonNetwork.JoinOrCreateRoom("room", new RoomOptions() { MaxPlayers = 1 }, TypedLobby.Default);
+        button.interactable = false;
     }
 
     // マッチングが成功した時に呼ばれるコールバック
