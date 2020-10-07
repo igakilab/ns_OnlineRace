@@ -41,7 +41,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public override void OnPlayerPropertiesUpdate(Player target, Hashtable changedProps)
     {
         // 準備完了ボタンが押されたら
-        if (PhotonNetwork.IsMasterClient && changedProps.TryGetState(out bool value))
+        if (changedProps.TryGetState(out bool value))
         {
             int count = 0;
             foreach (var player in PhotonNetwork.PlayerList)
@@ -54,8 +54,9 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             Debug.Log($"準備完了 {count}/{PhotonNetwork.CurrentRoom.MaxPlayers}");
             if (count == PhotonNetwork.CurrentRoom.MaxPlayers)
             {
+                readyButton.gameObject.SetActive(false);
                 // 現在のサーバー時刻を、ゲームの開始時刻に設定する
-                if (!PhotonNetwork.CurrentRoom.HasCountDownTime())
+                if (PhotonNetwork.IsMasterClient && !PhotonNetwork.CurrentRoom.HasCountDownTime())
                 {
                     PhotonNetwork.CurrentRoom.SetCountDownTime(PhotonNetwork.ServerTimestamp);
                 }
