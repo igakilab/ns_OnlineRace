@@ -92,6 +92,5 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         }
         if (!PhotonNetwork.CurrentRoom.TryGetStartTime(out int timestamp2)) { return; }
         timerLabel.text = Mathf.Max(unchecked(PhotonNetwork.ServerTimestamp - timestamp2) / 1000f).ToString("f2");
-
     }
 }
