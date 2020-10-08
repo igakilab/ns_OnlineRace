@@ -277,7 +277,7 @@ SpriteRenderer:
   m_Sprite: {fileID: 7364682651488144517, guid: 3ed8ab319dd916142a6163d00ab36163,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1.3, y: 1.46}
@@ -299,10 +299,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameLabel: {fileID: 7491221881273676416}
-  speed: 0.5
+  speed: 0.05
   camera: {fileID: 0}
   xAdjust: 5
   yAdjust: 3
+  sr: {fileID: -9112315595773354991}
 --- !u!114 &8619319800505372330
 MonoBehaviour:
   m_ObjectHideFlags: 0

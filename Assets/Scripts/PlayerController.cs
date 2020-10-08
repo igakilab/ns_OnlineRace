@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public float xAdjust = 5f;
     public float yAdjust = 3f;
 
+    public SpriteRenderer sr;
+
     void Start()
     {
         nameLabel.text = photonView.Owner.NickName;
@@ -39,13 +41,20 @@ public class PlayerController : MonoBehaviourPunCallbacks
             }
             if (Input.GetKey(KeyCode.LeftArrow))
             {
+                sr.flipX = false;
                 transform.Translate(-speed, 0f, 0f);
             }
             if (Input.GetKey(KeyCode.RightArrow))
             {
+                sr.flipX = true;
                 transform.Translate(speed, 0f, 0f);
             }
             camera.transform.position = new Vector3(transform.position.x + xAdjust, camera.transform.position.y, camera.transform.position.z);
+
+            if (transform.position.x > 20)
+            {
+                Debug.Log("ゴール！！");
+            }
         }
     }
 }
