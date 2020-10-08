@@ -13,6 +13,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public Button readyButton;
     public Text countDownLabel;
     public Text timerLabel;
+    public Text stateText;
 
     public int countDown = 3;
 
@@ -21,6 +22,9 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         PhotonNetwork.IsMessageQueueRunning = true;
 
         PhotonNetwork.Instantiate("Player", new Vector2(-5, -3), Quaternion.identity);
+
+        PhotonNetwork.CurrentRoom.SetKeyPlayerState(PhotonNetwork.LocalPlayer.NickName);
+        //stateText.text = PhotonNetwork.CurrentRoom.TryGetKeyPlayerState(out string state) + PhotonNetwork.LocalPlayer.NickName;
 
         PhotonNetwork.LocalPlayer.SetState(false);
 
@@ -33,6 +37,15 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.LocalPlayer.SetState(true);
             readyButton.interactable = false;
+        }
+    }
+
+    // ルームのカスタムプロパティが更新された時に呼ばれるコールバック
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        foreach (var room in roomList)
+        {
+            stateText.text = PhotonNetwork.CurrentRoom.TryGetKeyPlayerState(out string state);
         }
     }
 
