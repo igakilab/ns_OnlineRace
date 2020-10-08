@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField]
     private TextMeshPro nameLabel = default;
 
-    public float speed = 0.05f;
+    public float speed = 0.5f;
 
     public new GameObject camera;
     public float xAdjust = 5f;
@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             {
                 transform.Translate(speed, 0f, 0f);
             }
-            camera.transform.position = new Vector3(transform.position.x + xAdjust, transform.position.y + yAdjust, camera.transform.position.z);
+            camera.transform.position = new Vector3(transform.position.x + xAdjust, camera.transform.position.y, camera.transform.position.z);
         }
     }
 }
