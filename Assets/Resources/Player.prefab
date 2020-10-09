@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2289526965209151626}
   - component: {fileID: 7485254734662244363}
   - component: {fileID: 7491221881273676416}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -190,9 +190,9 @@ GameObject:
   - component: {fileID: 8619319800505372330}
   - component: {fileID: 4790551807753207924}
   - component: {fileID: -1480233006960457838}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

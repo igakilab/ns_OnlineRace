@@ -47,7 +47,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
             if (Input.GetKey(KeyCode.RightArrow))
             {
                 photonView.RPC(nameof(FlipPlayer), RpcTarget.All, true);
-                sr.flipX = true;
                 transform.Translate(speed, 0f, 0f);
             }
             camera.transform.position = new Vector3(transform.position.x + xAdjust, camera.transform.position.y, camera.transform.position.z);
