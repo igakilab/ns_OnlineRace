@@ -23,8 +23,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
         PhotonNetwork.Instantiate("Player", new Vector2(-5, -3), Quaternion.identity);
 
-        PhotonNetwork.CurrentRoom.SetKeyPlayerState(PhotonNetwork.LocalPlayer.NickName);
-        //stateText.text = PhotonNetwork.CurrentRoom.TryGetKeyPlayerState(out string state) + PhotonNetwork.LocalPlayer.NickName;
+        PhotonNetwork.CurrentRoom.SetPlayerState(PhotonNetwork.LocalPlayer.NickName, false);
 
         PhotonNetwork.LocalPlayer.SetState(false);
 
@@ -36,16 +35,24 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         if (!PhotonNetwork.LocalPlayer.GetState())
         {
             PhotonNetwork.LocalPlayer.SetState(true);
+            PhotonNetwork.CurrentRoom.SetPlayerState(PhotonNetwork.LocalPlayer.NickName, true);
             readyButton.interactable = false;
         }
     }
 
     // ルームのカスタムプロパティが更新された時に呼ばれるコールバック
-    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
     {
-        foreach (var room in roomList)
+        if (propertiesThatChanged.HasPlayerState())
         {
-            stateText.text = PhotonNetwork.CurrentRoom.TryGetKeyPlayerState(out string state);
+            stateText.text = PhotonNetwork.CurrentRoom.TryGetPlayerState(out string state);
+        }
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        if (PhotonNetwork.CurrentRoom.PlayerStateExits(otherPlayer.NickName)) {
+            PhotonNetwork.CurrentRoom.DeletePlayerState(otherPlayer.NickName);
         }
     }
 
