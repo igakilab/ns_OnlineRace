@@ -51,7 +51,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        if (PhotonNetwork.CurrentRoom.PlayerStateExits(otherPlayer.NickName)) {
+        if (PhotonNetwork.CurrentRoom.PlayerStateExits(otherPlayer.NickName))
+        {
             PhotonNetwork.CurrentRoom.DeletePlayerState(otherPlayer.NickName);
         }
     }

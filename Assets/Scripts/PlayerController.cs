@@ -41,11 +41,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
             }
             if (Input.GetKey(KeyCode.LeftArrow))
             {
-                sr.flipX = false;
+                photonView.RPC(nameof(FlipPlayer), RpcTarget.All, false);
                 transform.Translate(-speed, 0f, 0f);
             }
             if (Input.GetKey(KeyCode.RightArrow))
             {
+                photonView.RPC(nameof(FlipPlayer), RpcTarget.All, true);
                 sr.flipX = true;
                 transform.Translate(speed, 0f, 0f);
             }
@@ -56,5 +57,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 Debug.Log("ゴール！！");
             }
         }
+    }
+
+    [PunRPC]
+    public void FlipPlayer(bool state)
+    {
+        sr.flipX = state;
     }
 }

@@ -317,8 +317,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
+  m_SynchronizeRotation: 0
+  m_SynchronizeScale: 1
 --- !u!50 &4790551807753207924
 Rigidbody2D:
   serializedVersion: 4
