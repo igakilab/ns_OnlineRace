@@ -299,6 +299,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameLabel: {fileID: 7491221881273676416}
+  rankingLabel: {fileID: 0}
   speed: 0.05
   camera: {fileID: 0}
   xAdjust: 5

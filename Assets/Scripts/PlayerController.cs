@@ -1,14 +1,15 @@
 ﻿using Photon.Pun;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviourPunCallbacks
 {
 
     [SerializeField]
     private TextMeshPro nameLabel = default;
+
+    [SerializeField]
+    private TextMeshPro rankingLabel = default;
 
     public float speed = 0.5f;
 
@@ -18,9 +19,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     public SpriteRenderer sr;
 
+    private bool goal = false;
+
     void Start()
     {
         nameLabel.text = photonView.Owner.NickName;
+
+        rankingLabel = GameObject.Find("RankingText").GetComponent<TextMeshPro>();
 
         camera = Camera.main.gameObject;
     }
@@ -51,9 +56,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
             }
             camera.transform.position = new Vector3(transform.position.x + xAdjust, camera.transform.position.y, camera.transform.position.z);
 
-            if (transform.position.x > 20)
+            if (!goal && transform.position.x > 20)
             {
-                Debug.Log("ゴール！！");
+                goal = true;
+                photonView.RPC(nameof(WriteRanking), RpcTarget.All);
             }
         }
     }
@@ -62,5 +68,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
     public void FlipPlayer(bool state)
     {
         sr.flipX = state;
+    }
+
+    [PunRPC]
+    public void WriteRanking()
+    {
+        rankingLabel.text = rankingLabel.text + photonView.Owner.NickName + "\n";
     }
 }
