@@ -1,6 +1,7 @@
 ﻿using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -29,7 +30,7 @@ public class ConnectButton : MonoBehaviourPunCallbacks
     {
         foreach (var info in roomList)
         {
-            if (info.MaxPlayers == 0)
+            if (info.PlayerCount == 0)
             {
                 buttonText.text = "接続";
                 button.interactable = true;

@@ -30,7 +30,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
         rankingLabel = GameObject.Find("RankingText").GetComponent<TextMeshPro>();
         backButton = GameObject.Find("BackButton").GetComponent<Button>();
-        backButton.gameObject.SetActive(false);
 
         camera = Camera.main.gameObject;
     }

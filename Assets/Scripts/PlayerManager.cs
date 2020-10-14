@@ -82,10 +82,12 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             if (count == PhotonNetwork.CurrentRoom.MaxPlayers)
             {
                 readyButton.gameObject.SetActive(false);
+                backButton.gameObject.SetActive(false);
                 // 現在のサーバー時刻を、ゲームの開始時刻に設定する
                 if (PhotonNetwork.IsMasterClient && !PhotonNetwork.CurrentRoom.HasCountDownTime())
                 {
                     PhotonNetwork.CurrentRoom.SetCountDownTime(PhotonNetwork.ServerTimestamp);
+                    PhotonNetwork.CurrentRoom.IsOpen = false;
                 }
             }
         }
