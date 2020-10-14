@@ -47,7 +47,7 @@ public class ConnectButton : MonoBehaviourPunCallbacks
     public void OnClick()
     {
         // "room"という名前のルームに参加する（ルームが無ければ作成してから参加する）
-        PhotonNetwork.JoinOrCreateRoom("room", new RoomOptions() { MaxPlayers = 2 }, TypedLobby.Default);
+        PhotonNetwork.JoinOrCreateRoom("room", new RoomOptions() { MaxPlayers = 4 }, TypedLobby.Default);
         button.interactable = false;
     }
 
@@ -57,6 +57,12 @@ public class ConnectButton : MonoBehaviourPunCallbacks
         PhotonNetwork.IsMessageQueueRunning = false;
         PhotonNetwork.LocalPlayer.NickName = inputName.text;
         SceneManager.LoadScene("GameScene");
+    }
+
+    // ルームに参加できなかった時に呼ばれるコールバック
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        buttonText.text = "現在接続できません";
     }
 
     // 新しくルームを作成したときに呼ばれるコールバック
