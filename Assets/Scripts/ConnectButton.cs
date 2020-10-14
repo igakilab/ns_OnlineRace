@@ -1,8 +1,6 @@
 ﻿using Photon.Pun;
 using Photon.Realtime;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -59,4 +57,12 @@ public class ConnectButton : MonoBehaviourPunCallbacks
         PhotonNetwork.LocalPlayer.NickName = inputName.text;
         SceneManager.LoadScene("GameScene");
     }
+
+    // 新しくルームを作成したときに呼ばれるコールバック
+    public override void OnCreatedRoom()
+    {
+        GameRoomProperty.ResetHashtable();
+        GamePlayerProperty.ResetState();
+    }
+
 }

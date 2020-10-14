@@ -1,9 +1,6 @@
-﻿using ExitGames.Client.Photon;
-using Photon.Pun;
+﻿using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -127,7 +124,7 @@ public static class GameRoomProperty
         room.SetCustomProperties(stateHashtable);
     }
 
-    public static void resetHashtable()
+    public static void ResetHashtable()
     {
         timeHashtable.Clear();
         stateHashtable.Clear();

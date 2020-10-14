@@ -24,4 +24,9 @@ public static class GamePlayerProperty
         hashtable[StateKey] = state;
         player.SetCustomProperties(hashtable);
     }
+
+    public static void ResetState()
+    {
+        hashtable.Clear();
+    }
 }

@@ -1,8 +1,5 @@
 ﻿using Photon.Pun;
-using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
