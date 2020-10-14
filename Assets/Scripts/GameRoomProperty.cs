@@ -1,4 +1,5 @@
 ﻿using ExitGames.Client.Photon;
+using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -51,6 +52,16 @@ public static class GameRoomProperty
             return true;
         }
         timestamp = 0;
+        return false;
+    }
+
+    public static bool TryGetCurrentTime(this Room room, out string time)
+    {
+        if (room.TryGetStartTime(out int timestamp)) {
+            time = Mathf.Max(unchecked(PhotonNetwork.ServerTimestamp - timestamp) / 1000f).ToString("f2");
+            return true;
+        }
+        time = "0.0";
         return false;
     }
 

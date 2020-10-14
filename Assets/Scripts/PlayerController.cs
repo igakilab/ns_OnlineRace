@@ -73,6 +73,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [PunRPC]
     public void WriteRanking()
     {
-        rankingLabel.text = rankingLabel.text + photonView.Owner.NickName + "\n";
+        if (PhotonNetwork.CurrentRoom.TryGetCurrentTime(out string time))
+        {
+            rankingLabel.text = rankingLabel.text + photonView.Owner.NickName + " " + time + "s\n";
+        }
     }
 }
