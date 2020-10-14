@@ -4,6 +4,7 @@ using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -11,6 +12,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 {
 
     public Button readyButton;
+    public Button backButton;
     public Text countDownLabel;
     public Text timerLabel;
     public Text stateText;
@@ -28,6 +30,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         PhotonNetwork.LocalPlayer.SetState(false);
 
         readyButton.onClick.AddListener(OnClickReadyButton);
+        backButton.onClick.AddListener(OnClickBackButton);
     }
 
     public void OnClickReadyButton()
@@ -38,6 +41,13 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.SetPlayerState(PhotonNetwork.LocalPlayer.NickName, true);
             readyButton.interactable = false;
         }
+    }
+
+    public void OnClickBackButton()
+    {
+        backButton.interactable = false;
+        PhotonNetwork.Disconnect();
+        SceneManager.LoadScene("TitleScene");
     }
 
     // ルームのカスタムプロパティが更新された時に呼ばれるコールバック

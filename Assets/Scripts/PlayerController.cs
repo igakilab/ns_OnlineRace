@@ -1,6 +1,7 @@
 ﻿using Photon.Pun;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviourPunCallbacks
 {
@@ -10,6 +11,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     [SerializeField]
     private TextMeshPro rankingLabel = default;
+
+    public Button backButton;
 
     public float speed = 0.5f;
 
@@ -26,6 +29,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
         nameLabel.text = photonView.Owner.NickName;
 
         rankingLabel = GameObject.Find("RankingText").GetComponent<TextMeshPro>();
+        backButton = GameObject.Find("BackButton").GetComponent<Button>();
+        backButton.gameObject.SetActive(false);
 
         camera = Camera.main.gameObject;
     }
@@ -60,6 +65,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             {
                 goal = true;
                 photonView.RPC(nameof(WriteRanking), RpcTarget.All);
+                backButton.gameObject.SetActive(true);
             }
         }
     }
