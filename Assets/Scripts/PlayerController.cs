@@ -14,7 +14,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     public Button backButton;
 
-    public float speed = 0.5f;
+    public GroundCheck ground;
+
+    public float speed = 10f;
 
     public new GameObject camera;
     public float xAdjust = 5f;
@@ -22,7 +24,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     public SpriteRenderer sr;
 
+    private float jumpPower = 700f;
+
     private bool goal = false;
+
+    private Rigidbody2D rb;
+
+    private bool isGround = false;
 
     void Start()
     {
@@ -32,6 +40,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
         backButton = GameObject.Find("BackButton").GetComponent<Button>();
 
         camera = Camera.main.gameObject;
+
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void Update()
@@ -40,24 +50,14 @@ public class PlayerController : MonoBehaviourPunCallbacks
         if (!PhotonNetwork.CurrentRoom.HasStartTime()) { return; }
         if (photonView.IsMine)
         {
-            if (Input.GetKey(KeyCode.UpArrow))
+            //接地判定を得る
+            isGround = ground.IsGround();
+
+            if (Input.GetKeyDown(KeyCode.Space) && isGround)
             {
-                transform.Translate(0f, speed, 0f);
+                rb.AddForce(Vector2.up * jumpPower);
             }
-            if (Input.GetKey(KeyCode.DownArrow))
-            {
-                transform.Translate(0f, -speed, 0f);
-            }
-            if (Input.GetKey(KeyCode.LeftArrow))
-            {
-                photonView.RPC(nameof(FlipPlayer), RpcTarget.All, false);
-                transform.Translate(-speed, 0f, 0f);
-            }
-            if (Input.GetKey(KeyCode.RightArrow))
-            {
-                photonView.RPC(nameof(FlipPlayer), RpcTarget.All, true);
-                transform.Translate(speed, 0f, 0f);
-            }
+            transform.Translate(speed * Time.deltaTime, 0, 0);
             camera.transform.position = new Vector3(transform.position.x + xAdjust, camera.transform.position.y, camera.transform.position.z);
 
             if (!goal && transform.position.x > 20)
@@ -67,12 +67,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 backButton.gameObject.SetActive(true);
             }
         }
-    }
-
-    [PunRPC]
-    public void FlipPlayer(bool state)
-    {
-        sr.flipX = state;
     }
 
     [PunRPC]
