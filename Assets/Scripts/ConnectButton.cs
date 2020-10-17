@@ -55,6 +55,7 @@ public class ConnectButton : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         PhotonNetwork.IsMessageQueueRunning = false;
+        RankingData.ResetRanking();
         PhotonNetwork.LocalPlayer.NickName = inputName.text;
         SceneManager.LoadScene("GameScene");
     }
