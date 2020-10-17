@@ -1,4 +1,6 @@
 ﻿using Photon.Pun;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -47,7 +49,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     void Update()
     {
         // ゲームがスタートするまで動けない
-        if (!PhotonNetwork.CurrentRoom.HasStartTime()) { return; }
+        if (!PhotonNetwork.CurrentRoom.HasStartTime() || goal) { return; }
         if (photonView.IsMine)
         {
             //接地判定を得る
@@ -63,18 +65,19 @@ public class PlayerController : MonoBehaviourPunCallbacks
             if (!goal && transform.position.x > 20)
             {
                 goal = true;
-                photonView.RPC(nameof(WriteRanking), RpcTarget.All);
+                if (PhotonNetwork.CurrentRoom.TryGetCurrentTime(out string time))
+                {
+                    photonView.RPC(nameof(WriteRanking), RpcTarget.AllViaServer, time);
+                }
                 backButton.gameObject.SetActive(true);
             }
         }
     }
 
     [PunRPC]
-    public void WriteRanking()
+    public void WriteRanking(string time)
     {
-        if (PhotonNetwork.CurrentRoom.TryGetCurrentTime(out string time))
-        {
-            rankingLabel.text = rankingLabel.text + photonView.Owner.NickName + " " + time + "s\n";
-        }
+        RankingData.SetRanking(photonView.Owner.NickName, time);
+        rankingLabel.text = RankingData.GetRanking();
     }
 }
