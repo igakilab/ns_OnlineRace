@@ -26,13 +26,14 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     public SpriteRenderer sr;
 
-    private float jumpPower = 700f;
+    private float jumpPower = 500f;
 
     private bool goal = false;
 
     private Rigidbody2D rb;
 
     private bool isGround = false;
+    private bool inoperable = false;
 
     void Start()
     {
@@ -44,6 +45,19 @@ public class PlayerController : MonoBehaviourPunCallbacks
         camera = Camera.main.gameObject;
 
         rb = GetComponent<Rigidbody2D>();
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.tag == "Enemy")
+        {
+            rb.AddForce(new Vector2(-400f, 600f));
+            inoperable = true;
+        }
+        else if (collision.collider.tag == "Ground")
+        {
+            inoperable = false;
+        }
     }
 
     void Update()
@@ -59,10 +73,23 @@ public class PlayerController : MonoBehaviourPunCallbacks
             {
                 rb.AddForce(Vector2.up * jumpPower);
             }
-            transform.Translate(speed * Time.deltaTime, 0, 0);
+            if (Input.GetKey(KeyCode.A) && !inoperable)
+            {
+                transform.Translate(-speed * Time.deltaTime, 0, 0);
+            }
+            if (Input.GetKey(KeyCode.D) && !inoperable)
+            {
+                transform.Translate(speed * Time.deltaTime, 0, 0);
+            }
             camera.transform.position = new Vector3(transform.position.x + xAdjust, camera.transform.position.y, camera.transform.position.z);
 
-            if (!goal && transform.position.x > 20)
+            if (transform.position.y < -10)
+            {
+                transform.position = Vector2.zero;
+            }
+
+            //Debug.Log("X : " + transform.position.x + " Y : " + transform.position.y);
+            if (!goal && transform.position.x > 114)
             {
                 goal = true;
                 if (PhotonNetwork.CurrentRoom.TryGetCurrentTime(out string time))

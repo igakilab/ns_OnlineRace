@@ -201,7 +201,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5673424175268662379}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.01, y: -0.83, z: -0.018066406}
+  m_LocalPosition: {x: -0.01, y: -0.79, z: -0.018066406}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2219207808225217707}
@@ -231,7 +231,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.98, y: 0.13}
+  m_Size: {x: 0.35, y: 0.06}
   m_EdgeRadius: 0
 --- !u!114 &1526220621238983777
 MonoBehaviour:
@@ -260,6 +260,7 @@ GameObject:
   - component: {fileID: 8619319800505372330}
   - component: {fileID: 4790551807753207924}
   - component: {fileID: 8503757913243610141}
+  - component: {fileID: 8985155470771020724}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -303,6 +304,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 8619319800505372330}
+  - {fileID: 8985155470771020724}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -430,3 +432,19 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1.3, y: 1.46}
   m_Direction: 0
+--- !u!114 &8985155470771020724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8131365888852650305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e7cb724808c322458aa4d15f5035fa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 1
+  m_TeleportEnabled: 0
+  m_TeleportIfDistanceGreaterThan: 3
