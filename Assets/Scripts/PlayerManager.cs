@@ -30,7 +30,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 #endif  
         PhotonNetwork.IsMessageQueueRunning = true;
 
-        PhotonNetwork.Instantiate("Player", new Vector2(-5, -3), Quaternion.identity);
+        PhotonNetwork.Instantiate("Player", new Vector2(-5, 0), Quaternion.identity);
 
         PhotonNetwork.CurrentRoom.SetPlayerState(PhotonNetwork.LocalPlayer.NickName, false);
 

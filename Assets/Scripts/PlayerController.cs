@@ -132,10 +132,6 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 ground.SetGround(false);
                 rb.AddForce(Vector2.up * jumpPower);
             }
-            if (rb.velocity.y > 10)
-            {
-                rb.velocity = new Vector2(rb.velocity.x, 10);
-            }
             camera.transform.position = new Vector3(transform.position.x + xAdjust, camera.transform.position.y, camera.transform.position.z);
 
             if (transform.position.y < -10)
