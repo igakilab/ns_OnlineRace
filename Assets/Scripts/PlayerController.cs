@@ -1,7 +1,5 @@
 ﻿using Photon.Pun;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -120,7 +118,10 @@ public class PlayerController : MonoBehaviourPunCallbacks
             if ((lButtonDownFlag || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) && !inoperable)
             {
                 photonView.RPC(nameof(FlipPlayer), RpcTarget.All, false);
-                transform.Translate(-speed * Time.deltaTime, 0, 0);
+                if (transform.position.x > -8)
+                {
+                    transform.Translate(-speed * Time.deltaTime, 0, 0);
+                }
             }
             if ((rButtonDownFlag || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) && !inoperable)
             {
@@ -132,15 +133,21 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 ground.SetGround(false);
                 rb.AddForce(Vector2.up * jumpPower);
             }
-            camera.transform.position = new Vector3(transform.position.x + xAdjust, camera.transform.position.y, camera.transform.position.z);
+            if (rb.velocity.y > 10)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, 10);
+            }
+            //Debug.Log(transform.position.x + xAdjust);
+            camera.transform.position = new Vector3(Mathf.Clamp(transform.position.x + xAdjust, 0f, 180f), camera.transform.position.y, camera.transform.position.z);
 
+            //落ちたらリスポ
             if (transform.position.y < -10)
             {
                 transform.position = Vector2.zero;
             }
 
             //Debug.Log("X : " + transform.position.x + " Y : " + transform.position.y);
-            if (!goal && transform.position.x > 114)
+            if (!goal && transform.position.x > 170)
             {
                 goal = true;
                 if (PhotonNetwork.CurrentRoom.TryGetCurrentTime(out string time))
