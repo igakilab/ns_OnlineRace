@@ -158,7 +158,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 95}
+  m_AnchoredPosition: {x: -0.000061035, y: 67}
   m_SizeDelta: {x: 333.8498, y: 74.98682}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &342160405
@@ -170,7 +170,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 342160403}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
+  m_Script: {fileID: 11500000, guid: 1baf2d951ff900345adc27ac6377dd15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -224,6 +224,10 @@ MonoBehaviour:
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
+  m_DialogTitle: "\u540D\u524D\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044"
+  m_DialogOkBtn: OK
+  m_DialogCancelBtn: Cancel
+  m_DialogType: 1
 --- !u!114 &342160406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -444,7 +448,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 237.45}
+  m_AnchoredPosition: {x: -0.000061035, y: 197}
   m_SizeDelta: {x: 659.7251, y: 125.101715}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &967167515
@@ -539,7 +543,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 960, y: 600}
   m_ScreenMatchMode: 1
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -825,7 +829,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -0.000030518, y: -37.493}
   m_SizeDelta: {x: 333.8498, y: 74.98682}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1946885516

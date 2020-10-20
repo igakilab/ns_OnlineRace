@@ -1,5 +1,6 @@
 ﻿using Photon.Pun;
 using Photon.Realtime;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,14 +11,23 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
     public Button readyButton;
     public Button backButton;
+    public Button jumpButton;
+    public Button leftButton;
+    public Button rightButton;
     public Text countDownLabel;
     public Text timerLabel;
     public Text stateText;
 
     public int countDown = 3;
 
+    [DllImport("__Internal")]
+    private static extern void CheckPlatform();
+
     void Start()
     {
+#if (UNITY_WEBGL && !UNITY_EDITOR)
+        CheckPlatform();
+#endif  
         PhotonNetwork.IsMessageQueueRunning = true;
 
         PhotonNetwork.Instantiate("Player", new Vector2(-5, -3), Quaternion.identity);
@@ -28,6 +38,12 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
         readyButton.onClick.AddListener(OnClickReadyButton);
         backButton.onClick.AddListener(OnClickBackButton);
+        if (!GameManager.IsSmartPhone)
+        {
+            jumpButton.gameObject.SetActive(false);
+            leftButton.gameObject.SetActive(false);
+            rightButton.gameObject.SetActive(false);
+        }
     }
 
     public void OnClickReadyButton()
