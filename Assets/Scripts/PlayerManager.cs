@@ -99,6 +99,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             {
                 readyButton.gameObject.SetActive(false);
                 backButton.gameObject.SetActive(false);
+                stateText.gameObject.SetActive(false);
                 // 現在のサーバー時刻を、ゲームの開始時刻に設定する
                 if (PhotonNetwork.IsMasterClient && !PhotonNetwork.CurrentRoom.HasCountDownTime())
                 {
