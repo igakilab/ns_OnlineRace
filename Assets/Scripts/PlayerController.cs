@@ -1,8 +1,10 @@
 ﻿using Photon.Pun;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviourPunCallbacks
@@ -14,11 +16,17 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField]
     private TextMeshPro rankingLabel = default;
 
-    public Button backButton;
+    private Button backButton;
+    private Button jumpButton;
+
+    // ボタンを押したときtrue、離したときfalseになるフラグ
+    private bool lButtonDownFlag = false;
+    private bool rButtonDownFlag = false;
 
     public GroundCheck ground;
 
-    public float speed = 10f;
+    [SerializeField]
+    private float speed = 10f;
 
     public new GameObject camera;
     public float xAdjust = 5f;
@@ -45,6 +53,38 @@ public class PlayerController : MonoBehaviourPunCallbacks
         camera = Camera.main.gameObject;
 
         rb = GetComponent<Rigidbody2D>();
+
+        if (GameManager.IsSmartPhone)
+        {
+            jumpButton = GameObject.Find("JumpButton").GetComponent<Button>();
+            jumpButton.onClick.AddListener(OnClickJumpButton);
+
+            EventTrigger trigger = GameObject.Find("LeftButton").AddComponent<EventTrigger>();
+            trigger.triggers = new List<EventTrigger.Entry>();
+
+            EventTrigger.Entry entry = new EventTrigger.Entry();
+            entry.eventID = EventTriggerType.PointerDown;
+            entry.callback.AddListener(call => { lButtonDownFlag = true; });
+            trigger.triggers.Add(entry);
+
+            EventTrigger.Entry entry2 = new EventTrigger.Entry();
+            entry2.eventID = EventTriggerType.PointerUp;
+            entry2.callback.AddListener(call => { lButtonDownFlag = false; });
+            trigger.triggers.Add(entry2);
+
+            EventTrigger trigger2 = GameObject.Find("RightButton").AddComponent<EventTrigger>();
+            trigger2.triggers = new List<EventTrigger.Entry>();
+
+            EventTrigger.Entry entry3 = new EventTrigger.Entry();
+            entry3.eventID = EventTriggerType.PointerDown;
+            entry3.callback.AddListener(call => { rButtonDownFlag = true; });
+            trigger2.triggers.Add(entry3);
+
+            EventTrigger.Entry entry4 = new EventTrigger.Entry();
+            entry4.eventID = EventTriggerType.PointerUp;
+            entry4.callback.AddListener(call => { rButtonDownFlag = false; });
+            trigger2.triggers.Add(entry4);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -60,6 +100,14 @@ public class PlayerController : MonoBehaviourPunCallbacks
         }
     }
 
+    public void OnClickJumpButton()
+    {
+        if (isGround)
+        {
+            rb.AddForce(Vector2.up * jumpPower);
+        }
+    }
+
     void Update()
     {
         // ゲームがスタートするまで動けない
@@ -68,10 +116,21 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             //接地判定を得る
             isGround = ground.IsGround();
-
+            if (lButtonDownFlag)
+            {
+                transform.Translate(-speed * Time.deltaTime, 0, 0);
+            }
+            if (rButtonDownFlag)
+            {
+                transform.Translate(speed * Time.deltaTime, 0, 0);
+            }
             if (Input.GetKeyDown(KeyCode.Space) && isGround)
             {
                 rb.AddForce(Vector2.up * jumpPower);
+            }
+            if (rb.velocity.y > 10)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, 10);
             }
             if (Input.GetKey(KeyCode.A) && !inoperable)
             {
