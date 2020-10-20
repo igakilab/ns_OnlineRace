@@ -7,6 +7,11 @@ public class GroundCheck : MonoBehaviour
     private bool isGround = false;
     private bool isGroundEnter, isGroundStay, isGroundExit;
 
+    public void SetGround(bool ground)
+    {
+        isGround = ground;
+    }
+
     public bool IsGround()
     {
         if (isGroundEnter || isGroundStay)
@@ -29,6 +34,7 @@ public class GroundCheck : MonoBehaviour
         if (collision.tag == groundTag)
         {
             isGroundEnter = true;
+            Debug.Log("Enter");
         }
     }
 
@@ -45,6 +51,7 @@ public class GroundCheck : MonoBehaviour
         if (collision.tag == groundTag)
         {
             isGroundExit = true;
+            Debug.Log("Exit");
         }
     }
 }

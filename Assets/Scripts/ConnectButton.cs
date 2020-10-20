@@ -47,7 +47,7 @@ public class ConnectButton : MonoBehaviourPunCallbacks
     public void OnClick()
     {
         // "room"という名前のルームに参加する（ルームが無ければ作成してから参加する）
-        PhotonNetwork.JoinOrCreateRoom("room", new RoomOptions() { MaxPlayers = 4 }, TypedLobby.Default);
+        PhotonNetwork.JoinOrCreateRoom("room", new RoomOptions() { MaxPlayers = 1 }, TypedLobby.Default);
         button.interactable = false;
     }
 

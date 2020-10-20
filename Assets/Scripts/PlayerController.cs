@@ -104,6 +104,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if (isGround)
         {
+            ground.SetGround(false);
             rb.AddForce(Vector2.up * jumpPower);
         }
     }
@@ -116,29 +117,24 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             //接地判定を得る
             isGround = ground.IsGround();
-            if (lButtonDownFlag)
+            if ((lButtonDownFlag || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) && !inoperable)
             {
+                photonView.RPC(nameof(FlipPlayer), RpcTarget.All, false);
                 transform.Translate(-speed * Time.deltaTime, 0, 0);
             }
-            if (rButtonDownFlag)
+            if ((rButtonDownFlag || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) && !inoperable)
             {
+                photonView.RPC(nameof(FlipPlayer), RpcTarget.All, true);
                 transform.Translate(speed * Time.deltaTime, 0, 0);
             }
             if (Input.GetKeyDown(KeyCode.Space) && isGround)
             {
+                ground.SetGround(false);
                 rb.AddForce(Vector2.up * jumpPower);
             }
             if (rb.velocity.y > 10)
             {
                 rb.velocity = new Vector2(rb.velocity.x, 10);
-            }
-            if (Input.GetKey(KeyCode.A) && !inoperable)
-            {
-                transform.Translate(-speed * Time.deltaTime, 0, 0);
-            }
-            if (Input.GetKey(KeyCode.D) && !inoperable)
-            {
-                transform.Translate(speed * Time.deltaTime, 0, 0);
             }
             camera.transform.position = new Vector3(transform.position.x + xAdjust, camera.transform.position.y, camera.transform.position.z);
 
@@ -158,6 +154,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 backButton.gameObject.SetActive(true);
             }
         }
+    }
+
+    [PunRPC]
+    public void FlipPlayer(bool state)
+    {
+        sr.flipX = state;
     }
 
     [PunRPC]
