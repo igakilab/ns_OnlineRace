@@ -95,7 +95,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                 }
             }
             Debug.Log($"準備完了 {count}/{PhotonNetwork.CurrentRoom.MaxPlayers}");
-            if (count == PhotonNetwork.CurrentRoom.MaxPlayers)
+            if (count == PhotonNetwork.CurrentRoom.PlayerCount)
             {
                 readyButton.gameObject.SetActive(false);
                 backButton.gameObject.SetActive(false);

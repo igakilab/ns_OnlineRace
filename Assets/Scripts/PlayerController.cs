@@ -115,28 +115,29 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             //接地判定を得る
             isGround = ground.IsGround();
+            float horizontalKey = Input.GetAxis("Horizontal");
+            float xSpeed = 0.0f;
             if ((lButtonDownFlag || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) && !inoperable)
             {
                 photonView.RPC(nameof(FlipPlayer), RpcTarget.All, false);
                 if (transform.position.x > -8)
                 {
-                    transform.Translate(-speed * Time.deltaTime, 0, 0);
+                    //transform.Translate(new Vector2(-speed * Time.deltaTime, 0));
+                    xSpeed = -speed;
                 }
             }
-            if ((rButtonDownFlag || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) && !inoperable)
+            else if ((rButtonDownFlag || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) && !inoperable)
             {
                 photonView.RPC(nameof(FlipPlayer), RpcTarget.All, true);
-                transform.Translate(speed * Time.deltaTime, 0, 0);
+                //transform.Translate(new Vector2(speed * Time.deltaTime, 0));
+                xSpeed = speed;
             }
             if (Input.GetKeyDown(KeyCode.Space) && isGround)
             {
                 ground.SetGround(false);
-                rb.AddForce(Vector2.up * jumpPower);
+                rb.AddForce(new Vector2(0, jumpPower));
             }
-            if (rb.velocity.y > 10)
-            {
-                rb.velocity = new Vector2(rb.velocity.x, 10);
-            }
+            rb.velocity = new Vector2(xSpeed, rb.velocity.y);
             //Debug.Log(transform.position.x + xAdjust);
             camera.transform.position = new Vector3(Mathf.Clamp(transform.position.x + xAdjust, 0f, 180f), camera.transform.position.y, camera.transform.position.z);
 
