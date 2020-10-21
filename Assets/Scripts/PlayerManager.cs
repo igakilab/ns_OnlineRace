@@ -30,11 +30,12 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 #endif  
         PhotonNetwork.IsMessageQueueRunning = true;
 
-        PhotonNetwork.Instantiate("Player", new Vector2(-5, 0), Quaternion.identity);
-
-        PhotonNetwork.CurrentRoom.SetPlayerState(PhotonNetwork.LocalPlayer.NickName, false);
-
-        PhotonNetwork.LocalPlayer.SetState(false);
+        if (PhotonNetwork.LocalPlayer.NickName != "admin")
+        {
+            PhotonNetwork.Instantiate("Player", new Vector2(-5, 0), Quaternion.identity);
+            PhotonNetwork.CurrentRoom.SetPlayerState(PhotonNetwork.LocalPlayer.NickName, false);
+            PhotonNetwork.LocalPlayer.SetState(false);
+        }
 
         readyButton.onClick.AddListener(OnClickReadyButton);
         backButton.onClick.AddListener(OnClickBackButton);
@@ -98,7 +99,10 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             if (count == PhotonNetwork.CurrentRoom.PlayerCount)
             {
                 readyButton.gameObject.SetActive(false);
-                backButton.gameObject.SetActive(false);
+                if (PhotonNetwork.LocalPlayer.NickName != "admin")
+                {
+                    backButton.gameObject.SetActive(false);
+                }
                 stateText.gameObject.SetActive(false);
                 // 現在のサーバー時刻を、ゲームの開始時刻に設定する
                 if (PhotonNetwork.IsMasterClient && !PhotonNetwork.CurrentRoom.HasCountDownTime())
