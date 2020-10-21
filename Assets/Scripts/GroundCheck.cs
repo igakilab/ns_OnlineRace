@@ -7,6 +7,11 @@ public class GroundCheck : MonoBehaviour
     private bool isGround = false;
     private bool isGroundEnter, isGroundStay, isGroundExit;
 
+    public void SetGround(bool ground)
+    {
+        isGround = ground;
+    }
+
     public bool IsGround()
     {
         if (isGroundEnter || isGroundStay)

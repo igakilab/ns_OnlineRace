@@ -1,7 +1,5 @@
 ﻿using Photon.Pun;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -15,6 +13,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     [SerializeField]
     private TextMeshPro rankingLabel = default;
+
+    private Animator anim = null;
 
     private Button backButton;
     private Button jumpButton;
@@ -51,6 +51,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
         backButton = GameObject.Find("BackButton").GetComponent<Button>();
 
         camera = Camera.main.gameObject;
+
+        anim = GetComponent<Animator>();
 
         rb = GetComponent<Rigidbody2D>();
 
@@ -104,6 +106,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
     {
         if (isGround)
         {
+            ground.SetGround(false);
+            rb.velocity = new Vector2(rb.velocity.x, 0);
             rb.AddForce(Vector2.up * jumpPower);
         }
     }
@@ -116,39 +120,44 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             //接地判定を得る
             isGround = ground.IsGround();
-            if (lButtonDownFlag)
+            anim.SetBool("fly", !isGround);
+            float horizontalKey = Input.GetAxis("Horizontal");
+            float xSpeed = 0.0f;
+            if ((lButtonDownFlag || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) && !inoperable)
             {
-                transform.Translate(-speed * Time.deltaTime, 0, 0);
+                photonView.RPC(nameof(FlipPlayer), RpcTarget.All, true);
+                anim.SetBool("run", true);
+                if (transform.position.x > -8)
+                {
+                    xSpeed = -speed;
+                }
             }
-            if (rButtonDownFlag)
+            else if ((rButtonDownFlag || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) && !inoperable)
             {
-                transform.Translate(speed * Time.deltaTime, 0, 0);
+                photonView.RPC(nameof(FlipPlayer), RpcTarget.All, false);
+                anim.SetBool("run", true);
+                xSpeed = speed;
             }
-            if (Input.GetKeyDown(KeyCode.Space) && isGround)
+            else
             {
-                rb.AddForce(Vector2.up * jumpPower);
+                anim.SetBool("run", false);
             }
-            if (rb.velocity.y > 10)
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                rb.velocity = new Vector2(rb.velocity.x, 10);
+                OnClickJumpButton();
             }
-            if (Input.GetKey(KeyCode.A) && !inoperable)
-            {
-                transform.Translate(-speed * Time.deltaTime, 0, 0);
-            }
-            if (Input.GetKey(KeyCode.D) && !inoperable)
-            {
-                transform.Translate(speed * Time.deltaTime, 0, 0);
-            }
-            camera.transform.position = new Vector3(transform.position.x + xAdjust, camera.transform.position.y, camera.transform.position.z);
+            rb.velocity = new Vector2(xSpeed, rb.velocity.y);
+            //Debug.Log(transform.position.x + xAdjust);
+            camera.transform.position = new Vector3(Mathf.Clamp(transform.position.x + xAdjust, 0f, 180f), camera.transform.position.y, camera.transform.position.z);
 
+            //落ちたらリスポ
             if (transform.position.y < -10)
             {
                 transform.position = Vector2.zero;
             }
 
             //Debug.Log("X : " + transform.position.x + " Y : " + transform.position.y);
-            if (!goal && transform.position.x > 114)
+            if (!goal && transform.position.x > 170)
             {
                 goal = true;
                 if (PhotonNetwork.CurrentRoom.TryGetCurrentTime(out string time))
@@ -158,6 +167,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 backButton.gameObject.SetActive(true);
             }
         }
+    }
+
+    [PunRPC]
+    public void FlipPlayer(bool state)
+    {
+        sr.flipX = state;
     }
 
     [PunRPC]
