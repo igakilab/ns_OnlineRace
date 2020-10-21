@@ -123,21 +123,17 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 photonView.RPC(nameof(FlipPlayer), RpcTarget.All, false);
                 if (transform.position.x > -8)
                 {
-                    //transform.Translate(new Vector2(-speed * Time.deltaTime, 0));
                     xSpeed = -speed;
                 }
             }
             else if ((rButtonDownFlag || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) && !inoperable)
             {
                 photonView.RPC(nameof(FlipPlayer), RpcTarget.All, true);
-                //transform.Translate(new Vector2(speed * Time.deltaTime, 0));
                 xSpeed = speed;
             }
-            if (Input.GetKeyDown(KeyCode.Space) && isGround)
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                ground.SetGround(false);
-                rb.velocity = new Vector2(rb.velocity.x, 0);
-                rb.AddForce(Vector2.up * jumpPower);
+                OnClickJumpButton();
             }
             rb.velocity = new Vector2(xSpeed, rb.velocity.y);
             //Debug.Log(transform.position.x + xAdjust);
