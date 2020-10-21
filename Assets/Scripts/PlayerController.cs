@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
     [SerializeField]
     private TextMeshPro rankingLabel = default;
 
+    private Animator anim = null;
+
     private Button backButton;
     private Button jumpButton;
 
@@ -49,6 +51,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
         backButton = GameObject.Find("BackButton").GetComponent<Button>();
 
         camera = Camera.main.gameObject;
+
+        anim = GetComponent<Animator>();
 
         rb = GetComponent<Rigidbody2D>();
 
@@ -120,7 +124,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
             float xSpeed = 0.0f;
             if ((lButtonDownFlag || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) && !inoperable)
             {
-                photonView.RPC(nameof(FlipPlayer), RpcTarget.All, false);
+                photonView.RPC(nameof(FlipPlayer), RpcTarget.All, true);
+                anim.SetBool("run", true);
                 if (transform.position.x > -8)
                 {
                     xSpeed = -speed;
@@ -128,8 +133,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
             }
             else if ((rButtonDownFlag || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) && !inoperable)
             {
-                photonView.RPC(nameof(FlipPlayer), RpcTarget.All, true);
+                photonView.RPC(nameof(FlipPlayer), RpcTarget.All, false);
+                anim.SetBool("run", true);
                 xSpeed = speed;
+            }
+            else
+            {
+                anim.SetBool("run", false);
             }
             if (Input.GetKeyDown(KeyCode.Space))
             {
