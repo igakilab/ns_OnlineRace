@@ -103,6 +103,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         if (isGround)
         {
             ground.SetGround(false);
+            rb.velocity = new Vector2(rb.velocity.x, 0);
             rb.AddForce(Vector2.up * jumpPower);
         }
     }
@@ -135,7 +136,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
             if (Input.GetKeyDown(KeyCode.Space) && isGround)
             {
                 ground.SetGround(false);
-                rb.AddForce(new Vector2(0, jumpPower));
+                rb.velocity = new Vector2(rb.velocity.x, 0);
+                rb.AddForce(Vector2.up * jumpPower);
             }
             rb.velocity = new Vector2(xSpeed, rb.velocity.y);
             //Debug.Log(transform.position.x + xAdjust);
