@@ -120,6 +120,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         {
             //接地判定を得る
             isGround = ground.IsGround();
+            anim.SetBool("fly", !isGround);
             float horizontalKey = Input.GetAxis("Horizontal");
             float xSpeed = 0.0f;
             if ((lButtonDownFlag || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) && !inoperable)
