@@ -1,7 +1,7 @@
 ﻿using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
-using System.Diagnostics;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -16,6 +16,7 @@ public class ConnectButton : MonoBehaviourPunCallbacks
     {
         //ボタンを無効に
         button.interactable = false;
+        Debug.Log("ConnectButton");
     }
 
     // ロビーへの接続成功
@@ -46,6 +47,7 @@ public class ConnectButton : MonoBehaviourPunCallbacks
 
     public void OnClick()
     {
+        // 判定
         // "room"という名前のルームに参加する（ルームが無ければ作成してから参加する）
         PhotonNetwork.JoinOrCreateRoom("room", new RoomOptions() { MaxPlayers = 6 }, TypedLobby.Default);
         button.interactable = false;
@@ -60,9 +62,18 @@ public class ConnectButton : MonoBehaviourPunCallbacks
         SceneManager.LoadScene("GameScene");
     }
 
+    // ルーム作成ができなかった時に呼ばれるコールバック
+    public override void OnCreateRoomFailed(short returnCode, string message)
+    {
+        Debug.Log("ルーム作成失敗");
+        buttonText.text = "ルーム作成失敗";
+        button.interactable = true;
+    }
+
     // ルームに参加できなかった時に呼ばれるコールバック
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
+        Debug.Log("ルーム参加失敗");
         buttonText.text = "現在接続できません";
     }
 

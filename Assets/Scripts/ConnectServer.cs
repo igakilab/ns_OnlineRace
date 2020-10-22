@@ -1,4 +1,5 @@
 ﻿using Photon.Pun;
+using UnityEngine;
 
 public class ConnectServer : MonoBehaviourPunCallbacks
 {
@@ -6,6 +7,7 @@ public class ConnectServer : MonoBehaviourPunCallbacks
     {
         // マスターサーバーに接続
         PhotonNetwork.ConnectUsingSettings();
+        Debug.Log("ConnectMaster");
     }
 
     // マスターサーバーへの接続が成功した時に呼ばれるコールバック
@@ -13,5 +15,7 @@ public class ConnectServer : MonoBehaviourPunCallbacks
     {
         // ロビーに接続
         PhotonNetwork.JoinLobby();
+        Debug.Log("JoinLobby");
     }
+
 }
