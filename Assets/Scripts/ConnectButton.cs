@@ -1,6 +1,7 @@
 ﻿using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -45,12 +46,23 @@ public class ConnectButton : MonoBehaviourPunCallbacks
         }
     }
 
+    public bool IsMatch(string text)
+    {
+        return Regex.IsMatch(text, "^[0-9a-zA-Z-_]{0,10}$");
+    }
+
     public void OnClick()
     {
-        // 判定
-        // "room"という名前のルームに参加する（ルームが無ければ作成してから参加する）
-        PhotonNetwork.JoinOrCreateRoom("room", new RoomOptions() { MaxPlayers = 6 }, TypedLobby.Default);
-        button.interactable = false;
+        if (IsMatch(inputName.text))
+        {
+            // "room"という名前のルームに参加する（ルームが無ければ作成してから参加する）
+            PhotonNetwork.JoinOrCreateRoom("room", new RoomOptions() { MaxPlayers = 6 }, TypedLobby.Default);
+            button.interactable = false;
+        }
+        else
+        {
+            buttonText.text = "名前は半角英数字10文字以下";
+        }
     }
 
     // マッチングが成功した時に呼ばれるコールバック
