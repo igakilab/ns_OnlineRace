@@ -33,6 +33,10 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.LocalPlayer.NickName != "admin")
         {
             PhotonNetwork.Instantiate("Player", new Vector2(-5, 0), Quaternion.identity);
+            if (PhotonNetwork.LocalPlayer.NickName == "")
+            {
+                PhotonNetwork.LocalPlayer.NickName = "Player" + Random.Range(1000, 9999);
+            }
             PhotonNetwork.CurrentRoom.SetPlayerState(PhotonNetwork.LocalPlayer.NickName, false);
             PhotonNetwork.LocalPlayer.SetState(false);
         }
