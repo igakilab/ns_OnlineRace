@@ -212,7 +212,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
             }
             rb.velocity = new Vector2(xSpeed, rb.velocity.y);
             //Debug.Log(transform.position.y);
-            camera.transform.position = new Vector3(Mathf.Clamp(transform.position.x + xAdjust, 0f, 285), camera.transform.position.y, camera.transform.position.z);
+            camera.transform.position = new Vector3(Mathf.Clamp(transform.position.x + xAdjust, 0f, 280), camera.transform.position.y, camera.transform.position.z);
 
             //リスポ
             if (transform.position.y < -10)
@@ -221,8 +221,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 transform.position = reSpawnPosition.getPosition(transform.position);
             }
 
-            Debug.Log("X : " + transform.position.x + " Y : " + transform.position.y);
-            if (!goal && transform.position.x > 275)
+            //Debug.Log("X : " + transform.position.x + " Y : " + transform.position.y);
+            if (!goal && transform.position.x > 270)
             {
                 goal = true;
                 if (PhotonNetwork.CurrentRoom.TryGetCurrentTime(out string time))

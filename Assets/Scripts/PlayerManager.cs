@@ -38,8 +38,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                 PhotonNetwork.LocalPlayer.NickName = "Player" + Random.Range(1000, 9999);
             }
             PhotonNetwork.CurrentRoom.SetPlayerState(PhotonNetwork.LocalPlayer.NickName, false);
-            PhotonNetwork.LocalPlayer.SetState(false);
         }
+        PhotonNetwork.LocalPlayer.SetState(false);
 
         readyButton.onClick.AddListener(OnClickReadyButton);
         backButton.onClick.AddListener(OnClickBackButton);
