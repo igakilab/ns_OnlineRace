@@ -6,6 +6,11 @@ TagManager:
   tags:
   - Enemy
   - Ground
+  - Jump
+  - Ball
+  - Up
+  - Up2
+  - Jump2
   layers:
   - Default
   - TransparentFX
