@@ -1,6 +1,7 @@
 ﻿using Photon.Pun;
 using Photon.Realtime;
 using System.Runtime.InteropServices;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -18,7 +19,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public Text timerLabel;
     public Text stateText;
 
-    public int countDown = 3;
+    private float countUp = 0.0f;
+    private float autoDisconnectTime = 180.0f;
+    private float autoDisconnectTime2 = 300.0f;
+
+    public int startCountDown = 3;
 
     [DllImport("__Internal")]
     private static extern void CheckPlatform();
@@ -64,8 +69,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public void OnClickBackButton()
     {
         backButton.interactable = false;
-        PhotonNetwork.Disconnect();
-        SceneManager.LoadScene("TitleScene");
+        disconnect();
     }
 
     // ルームのカスタムプロパティが更新された時に呼ばれるコールバック
@@ -118,12 +122,26 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         }
     }
 
+    void disconnect()
+    {
+        PhotonNetwork.Disconnect();
+        SceneManager.LoadScene("TitleScene");
+    }
+
     void Update()
     {
         if (!PhotonNetwork.InRoom) { return; }
-        if (!PhotonNetwork.CurrentRoom.TryGetCountDownTime(out int timestamp)) { return; }
+        if (!PhotonNetwork.CurrentRoom.TryGetCountDownTime(out int timestamp))
+        {
+            countUp += Time.deltaTime;
+            if (countUp >= autoDisconnectTime)
+            {
+                disconnect();
+            }
+            return;
+        }
 
-        int remainingTime = countDown - unchecked(PhotonNetwork.ServerTimestamp - timestamp) / 1000;
+        int remainingTime = startCountDown - unchecked(PhotonNetwork.ServerTimestamp - timestamp) / 1000;
         if (remainingTime > 0)
         {
             countDownLabel.text = remainingTime.ToString();
@@ -148,6 +166,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.CurrentRoom.TryGetCurrentTime(out string time))
         {
             timerLabel.text = time;
+            // 一定時間経過で自動的に切断
+            if (float.Parse(time) >= autoDisconnectTime2)
+            {
+                disconnect();
+            }
         }
     }
 }
