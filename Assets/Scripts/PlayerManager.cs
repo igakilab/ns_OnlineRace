@@ -1,11 +1,8 @@
 ﻿using DG.Tweening;
 using Photon.Pun;
-using Photon.Pun.UtilityScripts;
 using Photon.Realtime;
 using System.Collections;
 using System.Runtime.InteropServices;
-using TMPro;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -14,15 +11,12 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class PlayerManager : MonoBehaviourPunCallbacks
 {
 
-    [SerializeField]
-    private Text countDown;
-
     public Button readyButton;
     public Button backButton;
     public Button jumpButton;
     public Button leftButton;
     public Button rightButton;
-    public Text countDownLabel;
+    public Text countDown;
     public Text timerLabel;
     public Text stateText;
 
@@ -191,7 +185,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         int remainingTime = startCountDown - unchecked(PhotonNetwork.ServerTimestamp - timestamp) / 1000;
         if (remainingTime > 0)
         {
-            countDownLabel.text = remainingTime.ToString();
             return;
         }
         else
@@ -202,11 +195,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                 {
                     PhotonNetwork.CurrentRoom.SetStartTime(PhotonNetwork.ServerTimestamp);
                 }
-                countDownLabel.text = "START!!!";
-            }
-            else
-            {
-                countDownLabel.text = "";
             }
         }
 
