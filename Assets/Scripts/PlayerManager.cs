@@ -107,7 +107,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             if (count == PhotonNetwork.CurrentRoom.PlayerCount)
             {
                 readyButton.gameObject.SetActive(false);
-                if (PhotonNetwork.LocalPlayer.NickName != "admin")
+                if (!GameManager.IsSmartPhone)
                 {
                     backButton.gameObject.SetActive(false);
                 }
@@ -166,6 +166,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.CurrentRoom.TryGetCurrentTime(out string time))
         {
             timerLabel.text = time;
+            // Qキーで切断
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                disconnect();
+            }
             // 一定時間経過で自動的に切断
             if (float.Parse(time) >= autoDisconnectTime2)
             {
