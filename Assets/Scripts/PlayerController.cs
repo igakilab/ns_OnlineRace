@@ -221,7 +221,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 transform.position = reSpawnPosition.getPosition(transform.position);
             }
 
-            //Debug.Log("X : " + transform.position.x + " Y : " + transform.position.y);
+            Debug.Log("X : " + transform.position.x + " Y : " + transform.position.y);
             if (!goal && transform.position.x > 270)
             {
                 goal = true;

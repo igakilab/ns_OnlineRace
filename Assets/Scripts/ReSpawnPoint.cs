@@ -6,9 +6,10 @@ using UnityEngine.XR.WSA;
 public class ReSpawnPoint : MonoBehaviour
 {
 
-    Vector2[] positions = new Vector2[5] {
+    Vector2[] positions = new Vector2[6] {
         new Vector2(0, 0),
-        new Vector2(65, -3),
+        new Vector2(40, 2.5f),
+        new Vector2(63, -3),
         new Vector2(133, -3),
         new Vector2(195, 4.4f),
         new Vector2(255, -3.5f)
