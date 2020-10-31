@@ -25,12 +25,13 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     public GroundCheck ground;
 
+    public ReSpawnPoint reSpawnPosition;
+
     [SerializeField]
     private float speed = 10f;
 
-    public new GameObject camera;
+    public GameObject camera;
     public float xAdjust = 5f;
-    public float yAdjust = 3f;
 
     public SpriteRenderer sr;
 
@@ -43,6 +44,12 @@ public class PlayerController : MonoBehaviourPunCallbacks
     private bool isGround = false;
     private bool inoperable = false;
 
+    private bool jumpFlag = false;
+    private bool jump2Flag = false;
+    private bool ballFlag = false;
+    private bool upFlag = false;
+    private bool up2Flag = false;
+
     void Start()
     {
         nameLabel.text = photonView.Owner.NickName;
@@ -50,7 +57,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
         rankingLabel = GameObject.Find("RankingText").GetComponent<TextMeshPro>();
         backButton = GameObject.Find("BackButton").GetComponent<Button>();
 
-        camera = Camera.main.gameObject;
+        camera = GameObject.Find("Main Camera");
 
         anim = GetComponent<Animator>();
 
@@ -91,14 +98,36 @@ public class PlayerController : MonoBehaviourPunCallbacks
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.collider.tag == "Enemy")
+        if (collision.collider.tag == "Ball")
         {
-            rb.AddForce(new Vector2(-400f, 600f));
+            ballFlag = true;
             inoperable = true;
         }
         else if (collision.collider.tag == "Ground")
         {
             inoperable = false;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Jump")
+        {
+            inoperable = true;
+            jumpFlag = true;
+        }
+        else if (collision.tag == "Jump2")
+        {
+            inoperable = true;
+            jump2Flag = true;
+        }
+        else if(collision.tag == "Up")
+        {
+            upFlag = true;
+        }
+        else if (collision.tag == "Up2")
+        {
+            up2Flag = true;
         }
     }
 
@@ -118,6 +147,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
         if (!PhotonNetwork.CurrentRoom.HasStartTime() || goal) { return; }
         if (photonView.IsMine)
         {
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                rb.velocity = Vector2.zero;
+                transform.position = reSpawnPosition.getPosition(transform.position);
+            }
             //接地判定を得る
             isGround = ground.IsGround();
             anim.SetBool("fly", !isGround);
@@ -142,22 +176,58 @@ public class PlayerController : MonoBehaviourPunCallbacks
             {
                 anim.SetBool("run", false);
             }
+            // リファクタリング必須
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 OnClickJumpButton();
             }
+            if (jumpFlag)
+            {
+                jumpFlag = false;
+                rb.velocity = Vector2.zero;
+                rb.AddForce(new Vector2(1000f, 500f));
+            }
+            else if (jump2Flag)
+            {
+                jump2Flag = false;
+                rb.velocity = Vector2.zero;
+                rb.AddForce(new Vector2(1000f, 300f));
+            }
+            else if (ballFlag)
+            {
+                ballFlag = false;
+                rb.velocity = Vector2.zero;
+                rb.AddForce(new Vector2(-400f, 600f));
+            }
+            else if (upFlag)
+            {
+                upFlag = false;
+                rb.velocity = Vector2.zero;
+                rb.AddForce(new Vector2(0f, 250f));
+            }
+            else if (up2Flag)
+            {
+                up2Flag = false;
+                rb.velocity = Vector2.zero;
+                rb.AddForce(new Vector2(0f, 1000f));
+            }
+            if (inoperable)
+            {
+                xSpeed = rb.velocity.x;
+            }
             rb.velocity = new Vector2(xSpeed, rb.velocity.y);
-            //Debug.Log(transform.position.x + xAdjust);
-            camera.transform.position = new Vector3(Mathf.Clamp(transform.position.x + xAdjust, 0f, 180f), camera.transform.position.y, camera.transform.position.z);
+            //Debug.Log(transform.position.y);
+            camera.transform.position = new Vector3(Mathf.Clamp(transform.position.x + xAdjust, 0f, 280), camera.transform.position.y, camera.transform.position.z);
 
-            //落ちたらリスポ
+            //リスポ
             if (transform.position.y < -10)
             {
-                transform.position = Vector2.zero;
+                rb.velocity = Vector2.zero;
+                transform.position = reSpawnPosition.getPosition(transform.position);
             }
 
             //Debug.Log("X : " + transform.position.x + " Y : " + transform.position.y);
-            if (!goal && transform.position.x > 170)
+            if (!goal && transform.position.x > 270)
             {
                 goal = true;
                 if (PhotonNetwork.CurrentRoom.TryGetCurrentTime(out string time))
@@ -168,6 +238,8 @@ public class PlayerController : MonoBehaviourPunCallbacks
             }
         }
     }
+
+
 
     [PunRPC]
     public void FlipPlayer(bool state)

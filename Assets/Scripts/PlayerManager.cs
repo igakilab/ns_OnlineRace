@@ -1,5 +1,7 @@
-﻿using Photon.Pun;
+﻿using DG.Tweening;
+using Photon.Pun;
 using Photon.Realtime;
+using System.Collections;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,11 +16,17 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public Button jumpButton;
     public Button leftButton;
     public Button rightButton;
-    public Text countDownLabel;
+    public Text countDown;
     public Text timerLabel;
     public Text stateText;
 
-    public int countDown = 3;
+    private float countUp = 0.0f;
+    private float autoDisconnectTime = 180.0f;
+    private float autoDisconnectTime2 = 300.0f;
+
+    public int startCountDown = 3;
+
+    RectTransform rect;
 
     [DllImport("__Internal")]
     private static extern void CheckPlatform();
@@ -28,6 +36,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 #if (UNITY_WEBGL && !UNITY_EDITOR)
         CheckPlatform();
 #endif  
+        rect = countDown.transform.GetComponent<RectTransform>();
+
         PhotonNetwork.IsMessageQueueRunning = true;
 
         if (PhotonNetwork.LocalPlayer.NickName != "admin")
@@ -38,8 +48,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                 PhotonNetwork.LocalPlayer.NickName = "Player" + Random.Range(1000, 9999);
             }
             PhotonNetwork.CurrentRoom.SetPlayerState(PhotonNetwork.LocalPlayer.NickName, false);
-            PhotonNetwork.LocalPlayer.SetState(false);
         }
+        PhotonNetwork.LocalPlayer.SetState(false);
 
         readyButton.onClick.AddListener(OnClickReadyButton);
         backButton.onClick.AddListener(OnClickBackButton);
@@ -64,8 +74,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public void OnClickBackButton()
     {
         backButton.interactable = false;
-        PhotonNetwork.Disconnect();
-        SceneManager.LoadScene("TitleScene");
+        Disconnect();
     }
 
     // ルームのカスタムプロパティが更新された時に呼ばれるコールバック
@@ -103,7 +112,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             if (count == PhotonNetwork.CurrentRoom.PlayerCount)
             {
                 readyButton.gameObject.SetActive(false);
-                if (PhotonNetwork.LocalPlayer.NickName != "admin")
+                if (!GameManager.IsSmartPhone)
                 {
                     backButton.gameObject.SetActive(false);
                 }
@@ -113,20 +122,69 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                 {
                     PhotonNetwork.CurrentRoom.SetCountDownTime(PhotonNetwork.ServerTimestamp);
                     PhotonNetwork.CurrentRoom.IsOpen = false;
+                    StartCoroutine("WaitSeconds");
                 }
             }
         }
     }
 
+    IEnumerator WaitSeconds()
+    {
+        int cnt = 3;
+
+        while (cnt > 0)
+        {
+            DOTween.Sequence()
+                .OnStart(() => {
+                    countDown.text = cnt.ToString();
+                    countDown.gameObject.SetActive(true);
+                })
+                .AppendInterval(0.4f)
+                .Append(rect.DOLocalMove(Vector2.zero, 0.6f))
+                .Join(countDown.DOFade(0, 0.6f))
+                .OnComplete(() => {
+                    cnt--;
+                    rect.localPosition = Vector2.up * 25f;
+                    countDown.color = Color.black;
+                    countDown.gameObject.SetActive(false);
+                });
+            yield return new WaitForSeconds(1f);
+
+        }
+        countDown.text = "START!!";
+
+        DOTween.Sequence()
+            .OnStart(() => {
+                countDown.gameObject.SetActive(true);
+            })
+            .Append(rect.DOScale(Vector2.one * 1.8f, 2f))
+            .Join(countDown.DOFade(0, 1f))
+            .OnComplete(() => {
+                countDown.gameObject.SetActive(false);
+            });
+    }
+
+    void Disconnect()
+    {
+        PhotonNetwork.Disconnect();
+        SceneManager.LoadScene("TitleScene");
+    }
+
     void Update()
     {
         if (!PhotonNetwork.InRoom) { return; }
-        if (!PhotonNetwork.CurrentRoom.TryGetCountDownTime(out int timestamp)) { return; }
-
-        int remainingTime = countDown - unchecked(PhotonNetwork.ServerTimestamp - timestamp) / 1000;
+        if (!PhotonNetwork.CurrentRoom.TryGetCountDownTime(out int timestamp))
+        {
+            countUp += Time.deltaTime;
+            if (PhotonNetwork.LocalPlayer.NickName != "admin" && countUp >= autoDisconnectTime)
+            {
+                Disconnect();
+            }
+            return;
+        }
+        int remainingTime = startCountDown - unchecked(PhotonNetwork.ServerTimestamp - timestamp) / 1000;
         if (remainingTime > 0)
         {
-            countDownLabel.text = remainingTime.ToString();
             return;
         }
         else
@@ -137,17 +195,22 @@ public class PlayerManager : MonoBehaviourPunCallbacks
                 {
                     PhotonNetwork.CurrentRoom.SetStartTime(PhotonNetwork.ServerTimestamp);
                 }
-                countDownLabel.text = "START!!!";
-            }
-            else
-            {
-                countDownLabel.text = "";
             }
         }
 
         if (PhotonNetwork.CurrentRoom.TryGetCurrentTime(out string time))
         {
             timerLabel.text = time;
+            // 0キーで切断
+            if (Input.GetKeyDown(KeyCode.Alpha0))
+            {
+                Disconnect();
+            }
+            // 一定時間経過で自動的に切断
+            if (float.Parse(time) >= autoDisconnectTime2)
+            {
+                Disconnect();
+            }
         }
     }
 }
