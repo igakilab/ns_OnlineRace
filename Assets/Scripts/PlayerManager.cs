@@ -176,7 +176,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         if (!PhotonNetwork.CurrentRoom.TryGetCountDownTime(out int timestamp))
         {
             countUp += Time.deltaTime;
-            if (countUp >= autoDisconnectTime)
+            if (PhotonNetwork.LocalPlayer.NickName != "admin" && countUp >= autoDisconnectTime)
             {
                 Disconnect();
             }
