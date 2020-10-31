@@ -201,8 +201,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.CurrentRoom.TryGetCurrentTime(out string time))
         {
             timerLabel.text = time;
-            // Qキーで切断
-            if (Input.GetKeyDown(KeyCode.Q))
+            // 0キーで切断
+            if (Input.GetKeyDown(KeyCode.Alpha0))
             {
                 Disconnect();
             }
