@@ -3949,7 +3949,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 12800000, guid: bea7f293b49af1b459b69f98011c8ecf, type: 3}
     m_FontSize: 14
-    m_FontStyle: 2
+    m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 40
@@ -3959,7 +3959,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\u540D\u524D\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044"
+  m_Text: "\u540D\u524D\u3092\u5165\u529B\u3057\u3066\u304F\u3060\u3055\u3044\n(\u534A\u89D2\u82F1\u6570\u5B5710\u6587\u5B57\u4EE5\u4E0B)\n\u30B9\u30DE\u30FC\u30C8\u30D5\u30A9\u30F3\u306E\u65B9\u306F\u5165\u529B\u4E0D\u8981"
 --- !u!222 &1358746832
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4103,7 +4103,7 @@ GameObject:
   - component: {fileID: 1452853128}
   - component: {fileID: 1452853127}
   m_Layer: 0
-  m_Name: cooltext366952026966726
+  m_Name: TitleImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
