@@ -147,6 +147,11 @@ public class PlayerController : MonoBehaviourPunCallbacks
         if (!PhotonNetwork.CurrentRoom.HasStartTime() || goal) { return; }
         if (photonView.IsMine)
         {
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                rb.velocity = Vector2.zero;
+                transform.position = reSpawnPosition.getPosition(transform.position);
+            }
             //接地判定を得る
             isGround = ground.IsGround();
             anim.SetBool("fly", !isGround);
@@ -221,7 +226,7 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 transform.position = reSpawnPosition.getPosition(transform.position);
             }
 
-            Debug.Log("X : " + transform.position.x + " Y : " + transform.position.y);
+            //Debug.Log("X : " + transform.position.x + " Y : " + transform.position.y);
             if (!goal && transform.position.x > 270)
             {
                 goal = true;
