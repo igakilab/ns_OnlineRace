@@ -1,5 +1,6 @@
 ﻿using Photon.Pun;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -7,6 +8,9 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviourPunCallbacks
 {
+
+    [DllImport("__Internal")]
+    private static extern void SetRanking(string name, string time);
 
     [SerializeField]
     private TextMeshPro nameLabel = default;
@@ -232,6 +236,9 @@ public class PlayerController : MonoBehaviourPunCallbacks
                 goal = true;
                 if (PhotonNetwork.CurrentRoom.TryGetCurrentTime(out string time))
                 {
+#if (UNITY_WEBGL && !UNITY_EDITOR)
+                        SetRanking(photonView.Owner.NickName, time);
+#endif
                     photonView.RPC(nameof(WriteRanking), RpcTarget.AllViaServer, time);
                 }
                 backButton.gameObject.SetActive(true);
